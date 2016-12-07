@@ -49,7 +49,7 @@ public class GraphMaster : MonoBehaviour {
 		curLocation.forgetUnit (unit.gameObject);
 		unit.setLocation (newLocation.GetComponent<MapNode>());
 		newLocation.GetComponent<MapNode>().learnUnit (unit.gameObject);
-		unit.gameObject.transform.position = newLocation.transform.position;
+		unit.gameObject.transform.position= newLocation.transform.position;
 	}
 
 }
