@@ -16,7 +16,7 @@ public class GraphMaster : MonoBehaviour {
 		if (Input.GetKeyDown ("q")) {
 			checkConsistancy ();
 		}
-		if (Input.GetKeyDown ("w")) {
+		if (Input.GetKeyDown ("e")) {
 			randomlyMoveUnit ();
 		}
 	}
