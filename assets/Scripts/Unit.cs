@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Unit : MonoBehaviour {
+public class Unit : MonoBehaviour,Tickable {
 
 	public MapNode location;
 	private GameObject selectionHaloObj;
@@ -11,11 +11,10 @@ public class Unit : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+		GameObject.FindObjectOfType<TimeMaster> ().subscribe (this);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+	public void discreteUpdate(){
 		evalOrder ();
 	}
 
