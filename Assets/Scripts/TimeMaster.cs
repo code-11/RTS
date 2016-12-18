@@ -18,10 +18,18 @@ public class TimeMaster : MonoBehaviour {
 		subscribed.Add (subscriber);
 	}
 
+	public void unsubscribe(Tickable subscriber){
+		subscribed.Remove (subscriber);
+	}
+
 	private void evalSubscribed(){
-		foreach(Tickable subscriber in subscribed ){
-			subscriber.discreteUpdate();
+		for (int i = 0; i < subscribed.Count; i += 1) {
+			Tickable subscriber = subscribed [i];
+			subscriber.discreteUpdate ();
 		}
+		/*foreach(Tickable subscriber in subscribed ){
+			subscriber.discreteUpdate();
+		}*/
 	}
 
 	private IEnumerator tick(){

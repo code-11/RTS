@@ -25,6 +25,7 @@ public class UnitMovement : MonoBehaviour {
 					GameObject hitObj = hit.collider.gameObject;
 					GameObject locObj = unit.getLocation ().gameObject;
 					Queue <GameObject> path = underGraph.PathTo (locObj,hitObj );
+					//Debug.Log (underGraph.displayPath(path));
 					unit.setOrders (path);
 				}
 			}

@@ -8,9 +8,12 @@ public class Unit : MonoBehaviour,Tickable {
 	private GameObject selectionHaloObj;
 	public Sprite haloSprite;
 	private Queue<GameObject> goal;
+	public int faction;
+	public bool inFight=false;
 
 	// Use this for initialization
 	void Start () {
+		paint ();
 		GameObject.FindObjectOfType<TimeMaster> ().subscribe (this);
 	}
 
@@ -69,6 +72,23 @@ public class Unit : MonoBehaviour,Tickable {
 	private void evalOrder(){
 		if (goal!=null && goal.Count>0){
 			moveTo(goal.Dequeue());
+			evalIfFight ();
+		}
+	}
+
+	private void evalIfFight(){
+		GameObject possibleEnemyUnit=location.returnEnemyUnit(faction);
+		if (possibleEnemyUnit!=null){
+			inFight = true;
+			possibleEnemyUnit.GetComponent<Unit> ().inFight = true;
+			GameObject fightObj = new GameObject (); 
+			//Center on parent
+			fightObj.name = "Fight";
+			fightObj.transform.SetParent (location.transform);
+			fightObj.transform.localPosition = new Vector3 (0, 0, 0);
+			fightObj.transform.localScale = new Vector3 (1, 1, 1);
+			OnFight theFight=fightObj.AddComponent<OnFight> ();
+			theFight.construct (this, possibleEnemyUnit.GetComponent<Unit> ());
 		}
 	}
 
@@ -82,5 +102,21 @@ public class Unit : MonoBehaviour,Tickable {
 
 	public MapNode getLocation(){
 		return location;
+	}
+
+	private void paint(){
+		Color toPaint;
+		switch(faction){
+		case 0:
+			toPaint = Color.blue;
+			break;
+		case 1:
+			toPaint = Color.red;
+			break;
+		default:
+			toPaint = Color.white;
+			break;
+		}
+		GetComponent<SpriteRenderer> ().color = toPaint;
 	}
 }

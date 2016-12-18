@@ -92,7 +92,7 @@ public class SelectionUI : MonoBehaviour {
 	private void setUnitsAsSelected(){
 		selectedUnits = new List<GameObject> ();
 		foreach (Unit curUnit in GameObject.FindObjectsOfType<Unit>()) {
-			if (IsWithinSelectionBounds (curUnit.gameObject)) {
+			if (IsWithinSelectionBounds (curUnit.gameObject) && curUnit.faction==0 && curUnit.inFight==false) {
 				selectedUnits.Add (curUnit.gameObject);
 			}
 		}

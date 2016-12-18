@@ -6,16 +6,28 @@ public class MapNode : MonoBehaviour {
 
 	public List<GameObject> connectedNodes;
 	public List<GameObject> units;
-	private LineRenderer connectionDrawer;
+	private List<LineRenderer> connectionDrawers;
 
 	// Use this for initialization
 	void Start () {
-		connectionDrawer = gameObject.AddComponent<LineRenderer> ();
-		connectionDrawer.material.color = Color.black;	
-		connectionDrawer.sortingOrder = 1;
-		connectionDrawer.SetWidth (0.02F, 0.02F);
-		connectionDrawer.SetVertexCount (2);
-		showConnections ();
+		connectionDrawers = new List<LineRenderer> ();
+		int i = 0;
+		foreach (GameObject el in connectedNodes) {
+			GameObject child = new GameObject ();
+			child.name = "Renderer " + i.ToString ();
+			child.transform.parent = transform;
+
+			LineRenderer connectionDrawer = child.AddComponent<LineRenderer> ();
+			connectionDrawer.material.color = Color.black;	
+			connectionDrawer.sortingOrder = 1;
+			connectionDrawer.SetWidth (0.02F, 0.02F);
+			connectionDrawer.SetVertexCount (2);
+			connectionDrawers.Add (connectionDrawer);
+			showConnection (el,connectionDrawer);
+
+			i += 1;
+		}
+
 	}
 	
 	// Update is called once per frame
@@ -31,6 +43,16 @@ public class MapNode : MonoBehaviour {
 		return units.Contains (someUnit);
 	}
 
+	public GameObject returnEnemyUnit(int attackerFaction){
+		GameObject toReturn = null;
+		foreach (GameObject unitObj in units) {
+			if (unitObj.GetComponent<Unit> ().faction != attackerFaction) {
+				return unitObj;
+			}
+		}
+		return toReturn;
+	}
+
 	public void forgetUnit(GameObject someUnit){
 		units.Remove (someUnit);
 	}
@@ -42,6 +64,10 @@ public class MapNode : MonoBehaviour {
 	public GameObject randomNeighbor(){
 		int randIndex = Random.Range (0, connectedNodes.Count);
 		return connectedNodes [randIndex];
+	}
+
+	public List<GameObject> getNeighbors(){
+		return connectedNodes;
 	}
 
 	public bool unitLocationConsistancyCheck(){
@@ -70,11 +96,8 @@ public class MapNode : MonoBehaviour {
 		return true;
 	}
 
-	public void showConnections(){
-		foreach(GameObject obj in connectedNodes){
-			if(obj ==null){
-				continue;
-			}
+	public void showConnection(GameObject obj,LineRenderer connectionDrawer){
+		if (obj != null) {
 			connectionDrawer.SetPosition (0, transform.position);
 			connectionDrawer.SetPosition (1, obj.transform.position);
 		}
